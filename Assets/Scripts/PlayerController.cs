@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     public float accel = 1000f;
     public float decel = 1000f;
 
+    public GameObject weapon;
+    public GameObject weaponAttach;
+
     // Components
     Animator animator;
     PlayerInput input;
@@ -26,6 +29,12 @@ public class PlayerController : MonoBehaviour
         horizontalHash = Animator.StringToHash("horizontal");
         verticalHash = Animator.StringToHash("vertical");
         isMovingHash = Animator.StringToHash("isMoving");
+
+        // Spawn weapon
+        weapon = Instantiate(weapon);
+        weapon.transform.parent = weaponAttach.transform;
+        weapon.transform.localPosition = Vector3.zero;
+        weapon.transform.localRotation = Quaternion.Euler(90,0,0);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
