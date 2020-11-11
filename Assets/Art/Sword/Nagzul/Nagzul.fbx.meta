@@ -3,12 +3,17 @@ guid: 32c8ae12f9ff99544b0dc829f63bfdf4
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: NazghulGreatsword
+    second: {fileID: 2100000, guid: 7f9a97603fe45f040a50fd619aaf7fe9, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
