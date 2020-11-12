@@ -82,10 +82,10 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(move * Time.deltaTime);
 
         // Update animations from movement
-        // vel = rb.velocity / maxSpeed;
+        vel = rb.velocity /*/ maxSpeed*/;
         
         // Inverse rotation of velocity
-        // vel = Quaternion.Inverse(transform.rotation) * vel;
+        vel = Quaternion.Inverse(orientation.transform.rotation) * vel;
         animator.SetBool(isMovingHash, vel.sqrMagnitude >= 0.05f || move.sqrMagnitude != 0);
         animator.SetFloat(horizontalHash, vel.x);
         animator.SetFloat(verticalHash, vel.z);
