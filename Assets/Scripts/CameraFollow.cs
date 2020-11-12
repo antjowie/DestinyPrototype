@@ -11,10 +11,12 @@ public class CameraFollow : MonoBehaviour
     
     Vector3 velocity = Vector3.zero;
 
-    void Start()
-    {
-        transform.parent = null;
-    }
+    // void Start()
+    // {
+    //     // transform.parent = null;
+    //     if(transform.parent != null)
+    //         Debug.LogWarning($"{transform.gameObject.name} should not be parented");
+    // }
     
     void Update()
     {
