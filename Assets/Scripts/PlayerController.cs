@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviour
     public new GameObject camera;
     public GameObject cameraTarget;
     public GameObject orientation;
-
+    
     // Components
     Animator animator;
     PlayerInput input;
     Rigidbody rb;
+    LookAtController lookAtController;
 
     // Animation hashes
     int horizontalHash;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         input = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody>();
+        lookAtController = transform.root.GetComponentInChildren<LookAtController>();
 
         horizontalHash = Animator.StringToHash("horizontal");
         verticalHash = Animator.StringToHash("vertical");
@@ -44,14 +46,10 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Rotate player based on camera
-        Vector3 forward = cameraTarget.transform.position - camera.transform.position;
-        forward = Vector3.ProjectOnPlane(forward,Vector3.up).normalized;
-        
-        orientation.transform.rotation = Quaternion.LookRotation(forward);
+        lookAtController.UpdatePosition(GetLookDir());
+        UpdateAnimations();
     }
 
     void FixedUpdate()
@@ -69,26 +67,35 @@ public class PlayerController : MonoBehaviour
         Vector3 move = GetMoveInput();
 
         CounterMovement(move, vel);
-        
-        // vel = rb.velocity;
-        //If speed is larger than maxspeed, cancel out the input so you don't go over max speed
-        if (move.x > 0 && vel.x > maxSpeed) move.x = 0;
-        if (move.x < 0 && vel.x < -maxSpeed) move.x = 0;
-        if (move.z > 0 && vel.z > maxSpeed) move.z = 0;
-        if (move.z < 0 && vel.z < -maxSpeed) move.z = 0;
+        if(move != Vector3.zero)
+        {
+            // Update rotation
+            orientation.transform.rotation = GetProjectedLookDir(Vector3.up);
+            
+            //If speed is larger than maxspeed, cancel out the input so you don't go over max speed
+            if (move.x > 0 && vel.x > maxSpeed) move.x = 0;
+            if (move.x < 0 && vel.x < -maxSpeed) move.x = 0;
+            if (move.z > 0 && vel.z > maxSpeed) move.z = 0;
+            if (move.z < 0 && vel.z < -maxSpeed) move.z = 0;
 
-        // Apply movement
-        move = orientation.transform.rotation * move * accel;
-        rb.AddForce(move * Time.deltaTime);
-
+            // Apply movement
+            move = orientation.transform.rotation * move * accel;
+            rb.AddForce(move * Time.deltaTime);
+        }
+    }
+    
+    void UpdateAnimations()
+    {
         // Update animations from movement
-        vel = rb.velocity /*/ maxSpeed*/;
+        Vector3 vel = rb.velocity /*/ maxSpeed*/;
+        Vector3 move = GetMoveInput();
         
         // Inverse rotation of velocity
         vel = Quaternion.Inverse(orientation.transform.rotation) * vel;
         animator.SetBool(isMovingHash, vel.sqrMagnitude >= 0.05f || move.sqrMagnitude != 0);
         animator.SetFloat(horizontalHash, vel.x);
         animator.SetFloat(verticalHash, vel.z);
+        lookAtController.UpdateMoving(vel.sqrMagnitude > 0.5f); 
     }
     
     void CounterMovement(Vector3 input, Vector3 relVel)
@@ -126,6 +133,26 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(n.x, fallspeed, n.z);
         }
     }
+    
+    Quaternion GetLookDir()
+    {
+        // Rotate player based on camera
+        Vector3 forward = cameraTarget.transform.position - camera.transform.position;
+        
+        // orientation.transform.rotation = Quaternion.LookRotation(forward);
+        return Quaternion.LookRotation(forward.normalized);
+    }
+    
+    Quaternion GetProjectedLookDir(Vector3 up)
+    {
+        // Rotate player based on camera
+        Vector3 forward = cameraTarget.transform.position - camera.transform.position;
+        forward = Vector3.ProjectOnPlane(forward,up).normalized;
+        
+        // orientation.transform.rotation = Quaternion.LookRotation(forward);
+        return Quaternion.LookRotation(forward);
+    }
+
     
     Vector3 GetMoveInput()
     {
