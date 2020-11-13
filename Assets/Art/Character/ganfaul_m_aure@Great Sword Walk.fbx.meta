@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 44222dba0d2839b4eac5cb3cd144d25c
+guid: 866827363b696d74e921a6bb5e1ba1ef
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Great Sword Run
+    second: Great Sword Walk
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Great Sword Run
+      name: Great Sword Walk
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 18
+      lastFrame: 41
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
