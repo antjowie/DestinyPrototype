@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Jog Backward Diagonal
+    second: Jog Backward Left Diagonal Root Motion
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Jog Backward Diagonal
+      name: Jog Backward Left Diagonal Root Motion
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
